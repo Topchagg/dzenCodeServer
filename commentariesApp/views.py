@@ -94,6 +94,7 @@ class MessageView(ModelViewSet):
                 return Response({"message":"wrong params"},status=status.HTTP_400_BAD_REQUEST)
 
             cachedData = CacheMethods.getCache(keyOfCache)
+
             if cachedData:
                 return Response(cachedData, status=status.HTTP_200_OK)
 
@@ -111,14 +112,22 @@ class MessageView(ModelViewSet):
             paginatedMessages = paginator.paginate_queryset(result, request)
             serializedData = self.serializer_class(paginatedMessages, many=True)
 
-            CacheMethods.setCache(keyOfCache, paginator.get_paginated_response(serializedData.data).data, 120) # Сохранение кеша
+            try:
+                CacheMethods.setCache(keyOfCache, paginator.get_paginated_response(serializedData.data).data, 120)# Сохранение кеша
+            except Exception as e:
+                print(e)
+                return Response("Problem in cacheing...", status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+            
             cacheToReturn = CacheMethods.getCache(keyOfCache) # получение сохранённого кеша
+
+            if not cacheToReturn:
+                return Response("Cache wasn't found",status=status.HTTP_404_NOT_FOUND)
 
             return Response(cacheToReturn) # Возвращаю кеш, чтоб унифицировать возращение данных
 
         except Exception as e:
             print(e)
-            return Response({"message": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"message": f"{str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def create(self, request, *args, **kwargs):
         jwtAuth = JWTAuthentication()

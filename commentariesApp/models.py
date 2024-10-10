@@ -19,7 +19,9 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     def save(self, *args, **kwargs):
         if self.password:  
+            print(self.password)
             self.password = make_password(self.password)  
+            print(self.password)
         super().save(*args, **kwargs)
 
 

@@ -11,13 +11,13 @@ class UserSerializer(ModelSerializer):
     
     class Meta:
         model = User
-        fields = ["username","email","password","pk"]
+        fields = ["username","email","password","pk",'is_staff']
 
 class UserDetailSerializer(ModelSerializer):
      
     class Meta:
         model = User
-        fields = ["username","email","pk"]
+        fields = ["username","email","pk",'is_staff']
 
 
 class fullMessageSerializer(ModelSerializer):
