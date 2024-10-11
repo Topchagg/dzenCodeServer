@@ -19,9 +19,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     def save(self, *args, **kwargs):
         if self.password:  
-            print(self.password)
             self.password = make_password(self.password)  
-            print(self.password)
         super().save(*args, **kwargs)
 
 
@@ -34,6 +32,5 @@ class Message(models.Model):
     isAnswer = models.BooleanField(default=False)
     answerTo = models.ForeignKey('self',related_name='answers',on_delete=models.CASCADE,null=True,blank=True)
     hasAnswers = models.BooleanField(default=False)
-
 
 

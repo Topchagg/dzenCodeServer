@@ -11,33 +11,33 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-import dj_database_url
+# import dj_database_url
 
 from datetime import timedelta
 from pathlib import Path
-from urllib.parse import urlparse
+# from urllib.parse import urlparse
 
 
 from django.conf import settings
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'  # Установите DEBUG на True для разработки
 
-redis_url = os.environ.get('REDIS_TLS_URL', 'redis://localhost:6379')
+# redis_url = os.environ.get('REDIS_TLS_URL', 'redis://localhost:6379')
 
-redis_parsed_url = urlparse(redis_url)
+# redis_parsed_url = urlparse(redis_url)
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': redis_url,
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'CONNECTION_POOL_KWARGS': {
-                'ssl_cert_reqs': None if redis_parsed_url.scheme == 'rediss' else 'required'
-            }
-        }
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': redis_url,
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#             'CONNECTION_POOL_KWARGS': {
+#                 'ssl_cert_reqs': None if redis_parsed_url.scheme == 'rediss' else 'required'
+#             }
+#         }
+#     }
+# }
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -112,35 +112,29 @@ WSGI_APPLICATION = 'testTaskServer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': os.getenv('MYSQL_DATABASE', 'dzencode_db'),
-    #     'USER': os.getenv('MYSQL_USER', 'root'),
-    #     'PASSWORD': os.getenv('MYSQL_PASSWORD', 'root'),
-    #     'HOST': 'localhost',
-    #     'port': '3306'
-    # 
-# }
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('JAWSDB_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('MYSQL_DATABASE', 'dzencode_db'),
+        'USER': os.getenv('MYSQL_USER', 'root'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD', 'root'),
+        'HOST': 'localhost',
+        'port': '3306'  
 }
-
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django_redis.cache.RedisCache',
-#         'LOCATION': REDIS_URL, 
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#             'CONNECTION_POOL_KWARGS': {
-#                 'max_connections': 10
-#             },
-#             'SSL': {
-#                 'ssl_cert_reqs': None 
-#             }
-#         }
-#     }
+}
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.environ.get('JAWSDB_URL'))
 # }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379', 
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

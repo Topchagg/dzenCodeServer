@@ -115,7 +115,6 @@ class MessageView(ModelViewSet):
             try:
                 CacheMethods.setCache(keyOfCache, paginator.get_paginated_response(serializedData.data).data, 120)# Сохранение кеша
             except Exception as e:
-                print(e)
                 return Response("Problem in cacheing...", status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
             
             cacheToReturn = CacheMethods.getCache(keyOfCache) # получение сохранённого кеша
@@ -206,7 +205,7 @@ class getAnswers(APIView):
 
         except Exception as e:
             print(e)
-            return Response({"message":"Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
+            return Response({"message":"Something went wrong","error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
         
 
 class CustomTokenObtainPairView(TokenObtainPairView):
